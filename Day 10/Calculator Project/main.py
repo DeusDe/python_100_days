@@ -1,26 +1,38 @@
-def add(n1, n2):
-    return n1 + n2
+from art import logo
 
-def subtract(n1, n2):
-    return n1 - n2
+def add(x_i, y_i):
+    return x_i + y_i
 
-def multiply(n1, n2):
-    return n1 * n2
+def subtract(x_i, y_i):
+    return x_i - y_i
 
-def divide(n1, n2):
-    return n1 / n2
+def multiply(x_i, y_i):
+    return x_i * y_i
+
+def divide(x_i, y_i):
+    return x_i / y_i
 
 
 
 calculations = {'+':add,'-':subtract,'*':multiply,'/':divide}
+x = 0
+print(logo)
+while True:
 
-u_i = input("Gib was ein")
-n1 = int(input("Zahl 1"))
-n2 = int(input("Zahl 2"))
-erg = 0
+    op = input("+,-,*,/ :")
+    if x == 0:
+        x = int(input("x: "))
+    y = int(input("y: "))
+    res = 0
 
-if u_i in calculations:
-    erg = calculations[u_i](n1, n2)
+    if op in calculations:
+        res = calculations[op](x, y)
 
+    print(res)
 
-print(erg)
+    choice = input("Do you want to continue using the result as x (y,n)?")
+    if choice == 'y':
+        x = res
+    elif choice == 'n':
+        x = 0
+

@@ -31,8 +31,7 @@ def caeser(original_text, shift_amount, direction):
         if char not in alphabet:
             encrypted_text += char
             continue
-        index = alphabet.index(char)
-        shifted_index = index + shift_amount
+        shifted_index = alphabet.index(char) + shift_amount
         while shifted_index >= len(alphabet):
             shifted_index-=len(alphabet)
         while shifted_index < 0:
