@@ -8,5 +8,8 @@ my_function()
 
 # Describe the Problem - Write your answers as comments:
 # 1. What is the for loop doing?
+# looping between 1 and 20
 # 2. When is the function meant to print "You got it"?
+# when the range is 20
 # 3. What are your assumptions about the value of i?
+# i will never reach 20 because it ends at 19
