@@ -59,7 +59,53 @@ class RessourceManager:
     def is_increasable(self,inc_amount):
         return self.res + inc_amount <= self.max_res
 
+    def increase(self,inc_amount):
+        self.set_res(self.res + inc_amount)
 
+    def reduce(self,red_amount):
+        if self.is_reducable(red_amount):
+            self.set_res(self.res-red_amount)
+
+class MoneyManager(RessourceManager):
+    def __init__(self):
+        super().__init__(2000,0,'money',0)
+
+    def return_change(self, change):
+        quarters = int(change // 0.25)
+        change -= quarters * 0.25
+
+        dimes = int(change // 0.10)
+        change -= dimes * 0.10
+
+        nickels = int(change // 0.05)
+        change -= nickels * 0.05
+
+        pennies = int(round(change / 0.01))
+
+        # Ergebnis ausgeben
+        print(f"Return {quarters} quarters, {dimes} dimes, {nickels} nickels, and {pennies} pennies.")
+
+    def insert_coins(self):
+        quarter = int(input('Insert quarters:'))
+        dime = int(input('Insert dimes:'))
+        nickel = int(input('Insert nickels:'))
+        pennies = int(input('Insert pennies:'))
+
+        inserted_value = quarter * 0.25 + dime * 0.10 + nickel * 0.05 + pennies * 0.01
+
+        return inserted_value
+
+    def pay(self,price):
+        inserted = self.insert_coins()
+
+        if not inserted >= price:
+            print("Not enough money")
+            return False
+
+        change = inserted - price
+        self.increase(price)
+        self.return_change(change)
+        return True
 
 class coffee_machine:
     def __init__(self,water,milk,coffee):
@@ -67,13 +113,13 @@ class coffee_machine:
                       'milk':RessourceManager(1000, 0, 'milk', milk),
                       'coffee':RessourceManager(1000, 0, 'coffee', coffee),
                       }
-        self.money = RessourceManager(1000, 0, 'money', 0)
+        self.money = MoneyManager()
         self.menu = MENU
 
     def menu_string(self):
         mstr = ""
         for order in self.menu:
-            mstr += f"{self.menu[order]['name']} for {self.menu[order]['cost']}€\n"
+            mstr += f"{self.menu[order]['name']} for {self.menu[order]['cost']}$\n"
         return mstr
 
     def ressources_report(self):
@@ -93,10 +139,10 @@ class coffee_machine:
                 ret_val = False
         return ret_val
 
-    def money_avaiable(self,price):
-        if self.money.is_reducable(price):
-            return True
-        return False
+    def ressources_reduce(self,ingredients):
+        for ingredient in ingredients:
+            self.ressources[ingredient].reduce(ingredients[ingredient])
+
 
     def make_coffee(self,order):
         if order not in self.menu:
@@ -109,15 +155,12 @@ class coffee_machine:
         if not self.ressources_avaiable(ingredients):
             return
 
-        if not self.money_avaiable(price):
-            print("Not enough money")
+        if not self.money.pay(price):
             return
 
+        self.ressources_reduce(ingredients)
 
-
-
-
-
+        print(f'Here is your {self.menu[order]["name"]}. Enjoy')
 
 machine = coffee_machine(200,200,300)
 
